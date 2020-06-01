@@ -10,6 +10,9 @@
       angularAuth0.parseHash(function (err, authResult) {
         if (authResult && authResult.accessToken && authResult.idToken) {
           setSession(authResult);
+          $timeout(function () {
+            $state.go("home");
+          });
         }
       });
     }

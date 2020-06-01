@@ -1,22 +1,24 @@
 (function () {
-  angular.module("app", ["auth0.auth0", "ui.router"]).config(config);
+  angular
+    .module("app", ["auth0.auth0", "ui.router", "angular-jwt"])
+    .config(config);
 
   config.$inject = [
     "$stateProvider",
     "$locationProvider",
     "$urlRouterProvider",
     "angularAuth0Provider",
-    // "$httpProvider",
-    // "jwtOptionsProvider",
+    "$httpProvider",
+    "jwtOptionsProvider",
   ];
 
   function config(
     $stateProvider,
     $locationProvider,
     $urlRouterProvider,
-    // $httpProvider,
-    angularAuth0Provider
-    // jwtOptionsProvider
+    angularAuth0Provider,
+    $httpProvider,
+    jwtOptionsProvider
   ) {
     $stateProvider
       .state("home", {
@@ -38,23 +40,23 @@
         controllerAs: "vm",
       });
 
+    jwtOptionsProvider.config({
+      tokenGetter: function () {
+        return localStorage.getItem("access_token");
+      },
+      whiteListedDomains: ["localhost"],
+    });
+
     angularAuth0Provider.init({
       clientID: "h9n0vAUGQeneyvmFvIy1XJP1sj8YcT3u",
       domain: "learning-angular-js.auth0.com",
       responseType: "token id_token",
       redirectUri: "http://localhost:3000/callback",
       scope: "openid profile",
-      // audience: "https://learning-angular-js.com/api",
+      audience: "https://learning-angular-js.com/api",
     });
 
-    // jwtOptionsProvider.config({
-    //   tokenGetter: function () {
-    //     return localStorage.getItem("access_token");
-    //   },
-    //   whiteListedDomains: ["localhost"],
-    // });
-
-    // $httpProvider.interceptors.push("jwtInterceptor");
+    $httpProvider.interceptors.push("jwtInterceptor");
 
     $urlRouterProvider.otherwise("/");
 

@@ -15,6 +15,7 @@
     "angular-jwt": "^0.1.11",
     "auth0-js": "^9.13.2",
     "bootstrap": "^4.4.1",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "popper.js": "^1.16.1"
   }
 }
